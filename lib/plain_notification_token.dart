@@ -3,19 +3,23 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:platform/platform.dart';
+typedef Future<dynamic> MessageHandler(Map<String, dynamic> message);
+typedef SelectNotificationCallback = Future<dynamic> Function(String payload);
 
-/// Utility class to get token to send push notification for Flutter.
-///
-/// This plugin is aiming to compatible with [firebase_messaging](https://pub.dev/packages/firebase_messaging) API.
 class PlainNotificationToken {
   static PlainNotificationToken _instance;
   final MethodChannel _channel;
   final Platform _platform;
+  MessageHandler _onMessage;
+  MessageHandler _onLaunch;
+  MessageHandler _onResume;
+  SelectNotificationCallback selectNotificationCallback;
+
 
   PlainNotificationToken._(MethodChannel channel, Platform platform)
       : _channel = channel,
         _platform = platform {
-    _channel.setMethodCallHandler(_handleMethod);
+    // _channel.setMethodCallHandler(_handleMethod);
   }
 
   factory PlainNotificationToken() =>
@@ -36,11 +40,16 @@ class PlainNotificationToken {
   final StreamController<IosNotificationSettings> _iosSettingsStreamController =
       StreamController<IosNotificationSettings>.broadcast();
 
+  final StreamController<String> _dataNotification = StreamController<String>.broadcast();
+
   /// Stream that fires when the user changes their notification settings.
   ///
   /// Only fires on iOS.
   Stream<IosNotificationSettings> get onIosSettingsRegistered =>
       _iosSettingsStreamController.stream;
+
+  // 
+  Stream<String> get onMessage => _dataNotification.stream;
 
   /// On iOS, prompts the user for notification permissions the first time it is called.
   ///
@@ -62,7 +71,46 @@ class PlainNotificationToken {
         _iosSettingsStreamController.add(IosNotificationSettings._fromMap(
             call.arguments.cast<String, bool>()));
         return null;
+      case "onMessage":
+        // print("plugin onMessage" + call.arguments.toString());
+        return _onMessage(call.arguments.cast<String, dynamic>());
+      case "onLaunch":
+        return _onLaunch(call.arguments.cast<String, dynamic>());
+      case "onResume":
+        // print("plugin onResume" + call.arguments.toString());
+        return _onResume(call.arguments.cast<String, dynamic>());
+      default:
+        throw UnsupportedError("Unrecognized JSON message");
     }
+  }
+  
+
+  /// Sets up [MessageHandler] for incoming messages.
+  void configure({
+    MessageHandler onMessage,
+    MessageHandler onLaunch,
+    MessageHandler onResume,
+  }) {
+    _onMessage = onMessage;
+    _onLaunch = onLaunch;
+    _onResume = onResume;
+    _channel.setMethodCallHandler(_handleMethod);
+    _channel.invokeMethod<void>('configure');
+  }
+
+  Future<dynamic> autoInitParse(serverUrl, applicationId) async{
+    // // if (Platform.isIOS) {
+    //   plainNotificationToken.requestPermission();
+    //   // If you want to wait until Permission dialog close,
+    //   // you need wait changing setting registered. 
+    //   await plainNotificationToken.onIosSettingsRegistered.first;
+    // // }
+    // final String token = await plainNotificationToken.getToken();
+    // await initParse(serverUrl, applicationId, token);
+    print("autoInitParse run");
+    await _channel.invokeMethod('initParse',{"serverUrl" :serverUrl, "applicationId": applicationId} );
+
+    // return token;
   }
 }
 
@@ -88,3 +136,7 @@ class IosNotificationSettings {
   @override
   String toString() => 'PushNotificationSettings ${toMap()}';
 }
+
+//  class DataNotification{
+//    final 
+//  }

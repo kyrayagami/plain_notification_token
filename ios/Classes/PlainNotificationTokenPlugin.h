@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface PlainNotificationTokenPlugin : NSObject<FlutterPlugin>
+@interface PlainNotificationTokenPlugin : NSObject<FlutterPlugin, UNUserNotificationCenterDelegate>
 @end
