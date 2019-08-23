@@ -16,7 +16,7 @@ Get your push notification token via platform way (APNs for iOS &#x2F; Firebase 
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.dependency 'Parse'
-  s.dependency 'Bolts'
+  # s.dependency 'Bolts'
 
   s.ios.deployment_target = '8.0'
 end

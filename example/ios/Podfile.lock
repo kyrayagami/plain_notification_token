@@ -1,9 +1,4 @@
 PODS:
-  - Bolts (1.9.0):
-    - Bolts/AppLinks (= 1.9.0)
-    - Bolts/Tasks (= 1.9.0)
-  - Bolts/AppLinks (1.9.0):
-    - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
   - Flutter (1.0.0)
   - Parse (1.17.2):
@@ -11,7 +6,6 @@ PODS:
   - Parse/Core (1.17.2):
     - Bolts/Tasks (~> 1.9)
   - plain_notification_token (0.0.1):
-    - Bolts
     - Flutter
     - Parse
 
@@ -34,7 +28,7 @@ SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   Parse: 3b31a3dd1777b07ee7f0caee32fafbff544483a5
-  plain_notification_token: 04dcb5269671d35b3d4dc13974aabaee2d6d5ea3
+  plain_notification_token: c4357bc012dfb4f0de4a906e924dbe30d0e8cd4c
 
 PODFILE CHECKSUM: 1cd712dcae5a9d502f36d18a34f6d95635a2c726
 

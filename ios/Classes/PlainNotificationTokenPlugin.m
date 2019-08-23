@@ -50,15 +50,23 @@
       result(nil);
   }
   else if([@"configure" isEqualToString:call.method]) {
+      NSLog(@"entro al configure");
     if (@available(iOS 10.0, *)) {
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        [center requestAuthorizationWithOptions:(UIUserNotificationTypeSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
             if (error != nil) {
                 NSLog(@"Error during requesting notification permission: %@", error);
             }
             if (granted) {
-                dispatch_async(dispatch_get_main_queue(), ^() {
-                    [[UIApplication sharedApplication] registerForRemoteNotifications];
+                dispatch_async(dispatch_get_main_queue  (), ^() {
+                    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+                    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+//                    [application registerUserNotificationSettings:settings];
+//                    [application registerForRemoteNotifications];
+//                    UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(forTypes: .Sound | .Alert | .Badge, categories: nil))
+//                    UIApplication.sharedApplication().registerForRemoteNotifications()
+                    
+                     [[UIApplication sharedApplication] registerForRemoteNotifications];
                 });
                 [self->_channel invokeMethod:@"onIosSettingsRegistered" arguments:@"settings"];
             }
@@ -78,9 +86,9 @@
     } else {
         // Fallback on earlier versions
     }
-    if (_launchNotification != nil) {
-        [_channel invokeMethod:@"onLaunch" arguments:_launchNotification];
-    }
+    // if (_launchNotification != nil) {
+    //     [_channel invokeMethod:@"onLaunch" arguments:_launchNotification];
+    // }
   }
   else if ([@"initParse" isEqualToString:call.method]) {
     /*
@@ -151,6 +159,8 @@
         if ([[settings objectForKey:@"sound"] boolValue]) {
             options |= UNAuthorizationOptionSound;
         }
+        // options |= UNAuthorizationOptionSound;
+
         if ([[settings objectForKey:@"badge"] boolValue]) {
             options |= UNAuthorizationOptionBadge;
         }
@@ -163,7 +173,11 @@
             }
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^() {
+                    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+                    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes  categories:nil];
+                    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
                     [[UIApplication sharedApplication] registerForRemoteNotifications];
+//                    [[UIApplication sharedApplication] registerForRemoteNotifications];
                 });
                 [self->_channel invokeMethod:@"onIosSettingsRegistered" arguments:settings];
             }
@@ -218,8 +232,10 @@
 
 - (bool)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
     NSLog(@"receive remote notification");
+//    notificationContent.sound = UNNotificationSound.default()
     [self didReceiveRemoteNotification:userInfo];
-    completionHandler(UIBackgroundFetchResultNoData);
+//    [PFPush handlePush:userInfo];
+//    completionHandler(UIBackgroundFetchResultNoData);
     return YES;
 }
 
@@ -284,7 +300,8 @@
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)(void))completionHandler NS_AVAILABLE_IOS(10.0) {
     if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
-        NSString *payload = (NSString *) response.notification.request.content.userInfo;
+//        NSString *payload = (NSString *) response.notification.request.content.userInfo;
+//        [PFPush handlePush:response.notification.request.content.userInfo];
         if(initialized) {
 //            [self handleSelectNotification:payload];
             [self handleSelectNotification:response.notification.request.content.userInfo];
