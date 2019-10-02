@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:platform/platform.dart';
@@ -48,7 +49,7 @@ class PlainNotificationToken {
   Stream<IosNotificationSettings> get onIosSettingsRegistered =>
       _iosSettingsStreamController.stream;
 
-  // 
+  //
   Stream<String> get onMessage => _dataNotification.stream;
 
   /// On iOS, prompts the user for notification permissions the first time it is called.
@@ -72,18 +73,24 @@ class PlainNotificationToken {
             call.arguments.cast<String, bool>()));
         return null;
       case "onMessage":
-        // print("plugin onMessage" + call.arguments.toString());
-        return _onMessage(call.arguments.cast<String, dynamic>());
+        print("plugin onMessage" + call.arguments.toString());
+        try {
+          //return _onMessage(call.arguments.cast<String, dynamic>()); 
+          return _onMessage(call.arguments.cast<String, dynamic>());
+        } catch (e) {
+          print("Error" + e);
+        }
+        return _onMessage(call.arguments);
       case "onLaunch":
         return _onLaunch(call.arguments.cast<String, dynamic>());
       case "onResume":
-        // print("plugin onResume" + call.arguments.toString());
+        print("plugin onResume" + call.arguments.toString());
         return _onResume(call.arguments.cast<String, dynamic>());
       default:
         throw UnsupportedError("Unrecognized JSON message");
     }
   }
-  
+
 
   /// Sets up [MessageHandler] for incoming messages.
   void configure({
@@ -98,17 +105,17 @@ class PlainNotificationToken {
     _channel.invokeMethod<void>('configure');
   }
 
-  Future<dynamic> autoInitParse(serverUrl, applicationId) async{
+  Future<dynamic> autoInitParse(serverUrl, applicationId, clientKey) async{
     // // if (Platform.isIOS) {
     //   plainNotificationToken.requestPermission();
     //   // If you want to wait until Permission dialog close,
-    //   // you need wait changing setting registered. 
+    //   // you need wait changing setting registered.
     //   await plainNotificationToken.onIosSettingsRegistered.first;
     // // }
     // final String token = await plainNotificationToken.getToken();
     // await initParse(serverUrl, applicationId, token);
     print("autoInitParse run");
-    await _channel.invokeMethod('initParse',{"serverUrl" :serverUrl, "applicationId": applicationId} );
+    await _channel.invokeMethod('initParse',{"serverUrl" :serverUrl, "applicationId": applicationId, "clientKey": clientKey} );
 
     // return token;
   }
@@ -138,5 +145,5 @@ class IosNotificationSettings {
 }
 
 //  class DataNotification{
-//    final 
+//    final
 //  }

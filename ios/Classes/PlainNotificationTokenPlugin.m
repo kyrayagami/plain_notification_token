@@ -65,7 +65,7 @@
 //                    [application registerForRemoteNotifications];
 //                    UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(forTypes: .Sound | .Alert | .Badge, categories: nil))
 //                    UIApplication.sharedApplication().registerForRemoteNotifications()
-                    
+
                      [[UIApplication sharedApplication] registerForRemoteNotifications];
                 });
                 [self->_channel invokeMethod:@"onIosSettingsRegistered" arguments:@"settings"];
@@ -73,7 +73,7 @@
             if(self->_launchNotification != nil) {
                 [self handleSelectNotification:self->_launchNotification];
 //                  [FlutterLocalNotificationsPlugin handleSelectNotification:launchPayload];
-                
+
             }
             result(@(granted));
         }];
@@ -98,8 +98,10 @@
     */
     NSString *applicationId = call.arguments[@"applicationId"];
     NSString *serverUrl = call.arguments[@"serverUrl"];
+    NSString *clientKey = call.arguments[@"clientKey"];
     //      [self initParse:[ appId:applicationId serverUrl:serverUrl ]]
-    [self initParse:applicationId serverUrl:serverUrl ];
+      NSLog(@"Clientkey en objective c: %@", clientKey);
+    [self initParse:applicationId serverUrl:serverUrl clientKey:clientKey ];
 //      [self runTask:runMyTask arguments:taskArgs launchPath:command];
 //      - (void)runTask:(NSTask *)theTask arguments:(NSArray *)arguments launchPath:(NSString *)launchPath;
 //      -(void)initParse:(NSString *)appId initParse:(NSString *)serverUrl{
@@ -111,7 +113,7 @@
 }
 
 //-(void)initParse:(NSString *)appId (NSString *) serverUrl{
--(void)initParse:(NSString *)appId serverUrl:(NSString *)serverUrl{
+-(void)initParse:(NSString *)appId serverUrl:(NSString *)serverUrl clientKey:(NSString *)clientKey {
   // BOOL isOk = [self swizzled_application:application didFinishLaunchingWithOptions:launchOptions];
 //   @try {
 //      // test if Parse client has been initialized in the main AppDelegate.m
@@ -122,11 +124,11 @@
       // notification settings yourself in your main AppDelegate.m 's didFinishLaunchingWithOptions
       //
 //      ParsePushPlugin* pluginInstance = [self getParsePluginInstance];
-      
+
      [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         configuration.applicationId = appId;
         configuration.server = serverUrl;
-         configuration.clientKey = @"";
+        configuration.clientKey = clientKey;
      }]];
 
 //      if(!autoReg.length || [autoReg caseInsensitiveCompare:@"true"] == 0 || [application isRegisteredForRemoteNotifications]){
@@ -257,7 +259,7 @@
 /*- (void)swizzled_application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [self swizzled_application:application didReceiveRemoteNotification:userInfo];
-    
+
     if (application.applicationState != UIApplicationStateActive) {
         // The application was just brought from the background to the foreground,
         // so we consider the app as having been "opened by a push notification."
@@ -269,7 +271,7 @@
     // PN that arrived when app is not running or in background (UIApplicationStateInactive or UIApplicationStateBackground)
     //    must be opened by user to reach this part of the code
 //    ParsePushPlugin* pluginInstance = [self getParsePluginInstance];
-    
+
 //    [pluginInstance jsCallback:userInfo withAction:(application.applicationState == UIApplicationStateActive) ? @"RECEIVE" : @"OPEN"];
     NSLog(@"llego la notificacion  en swizzled application: ");
     [PFPush handlePush:userInfo];

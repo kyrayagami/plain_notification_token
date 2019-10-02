@@ -1,5 +1,4 @@
-/*
-package net.kikuchy.plain_notification_token_example;
+package com.veracidadchannel.vc;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
@@ -12,5 +11,3 @@ public class MainActivity extends FlutterActivity {
     GeneratedPluginRegistrant.registerWith(this);
   }
 }
-
-*/

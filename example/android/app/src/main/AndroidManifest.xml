@@ -1,16 +1,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.kikuchy.plain_notification_token_example">
+    package="com.veracidadchannel.vc">
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.intent.action.BOOT_COMPLETED" />
+
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="plain_notification_token_example"
+        android:label="test_vc"
         android:icon="@mipmap/ic_launcher">
+
+
         <activity
+            android:usesCleartextTraffic="true"
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -21,13 +33,44 @@
                  until Flutter renders its first frame. It can be removed if
                  there is no splash screen (such as the default splash screen
                  defined in @style/LaunchTheme). -->
+
             <meta-data
                 android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
                 android:value="true" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
+        <!--
+        <receiver android:name="net.kikuchy.plain_notification_token.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+        -->
+
+        <receiver
+            android:name="net.kikuchy.plain_notification_token.PushBroadcastReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/ic_notification"/>
+
+        <meta-data android:name="ParseAppId" android:value="xlX7CBM2dolI89gS8KeSymxdXaLPlPh2xrv9vPye" />
+        <meta-data android:name="ParseClientKey" android:value="aOgAQ4zg29o9hdYy8SFNFCUcnXWXUbIoijh5qq2R" />
+        <meta-data android:name="ParseServerUrl" android:value="https://parseapi.back4app.com/" />
+
     </application>
 </manifest>

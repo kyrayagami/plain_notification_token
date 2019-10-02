@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "69597233803",
+    "firebase_url": "https://veracidad-channel.firebaseio.com",
+    "project_id": "veracidad-channel",
+    "storage_bucket": "veracidad-channel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69597233803:android:a16251a4d5cdec3958ca8e",
+        "android_client_info": {
+          "package_name": "com.veracidadchannel.vc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69597233803-qj43fs88l0mml3vhcvnv4m5cphu0ig8m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtW9T6IUSgEulic-kAdeuztVlrPd1JopQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69597233803-qj43fs88l0mml3vhcvnv4m5cphu0ig8m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
