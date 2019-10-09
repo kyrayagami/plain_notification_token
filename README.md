@@ -11,6 +11,24 @@ To integrate your plugin into the Android part of your app, setup Firebase:
 1. Using the [Firebase Console](https://console.firebase.google.com/) add an Android app to your project:
 Follow the assistant, download the generated `google-services.json` file and place it inside `android/app`.
 2. Modify the `android/build.gradle` file and the `android/app/build.gradle` file to add the Google services plugin as described by the Firebase assistant.
+3. Add this lines in your AndroidManifest.xml
+```
+        <receiver
+            android:name="net.kikuchy.plain_notification_token.PushBroadcastReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data android:name="com.parse.push.notification_icon" android:resource="SOURCE_PATH"/>
+
+        <meta-data android:name="ParseAppId" android:value="ParseAppIdVALUE" />
+        <meta-data android:name="ParseClientKey" android:value="ParseClientKeyVALUE" />
+        <meta-data android:name="ParseServerUrl" android:value="ParseServerUrlVALUE" />
+```
 
 (Please see [this tutorial](https://firebase.google.com/docs/android/setup) if you want.)
 
@@ -19,7 +37,7 @@ Follow the assistant, download the generated `google-services.json` file and pla
 To integrate your plugin into the iOS part of your app, follow these steps:
 
 1. Generate the certificates from [Apple developer center](https://developer.apple.com/account) for receiving push notifications. (Please see [this article](https://medium.com/@ankushaggarwal/generate-apns-certificate-for-ios-push-notifications-85e4a917d522) if you want the tutorial.)
-2. Enable `Push Notification` in `Capabilities` tab in Xcode opening your `ios/Runner.xcworkspace`. 
+2. Enable `Push Notification` in `Capabilities` tab in Xcode opening your `ios/Runner.xcworkspace`.
 
 ![Enabling Push Notification switch](art/enable_push_notification.png)
 
@@ -40,9 +58,9 @@ To get token, call `getToken()`:
 // (iOS Only) Need requesting permission of Push Notification.
 if (Platform.isIOS) {
   plainNotificationToken.requestPermission();
-  
+
   // If you want to wait until Permission dialog close,
-  // you need wait changing setting registered. 
+  // you need wait changing setting registered.
   await plainNotificationToken.onIosSettingsRegistered.first;
 }
 
