@@ -135,6 +135,15 @@ class _MyAppState extends State<MyApp> {
       print(e);
     }
   }
+  void _subscribeAChannel(){
+    final PlainNotificationToken _plainNotificationToken = PlainNotificationToken();
+    _plainNotificationToken.subscribeToTopic('Rock&Roll');
+  }
+
+  void _unSubscribeAChannel(){
+    final PlainNotificationToken _plainNotificationToken = PlainNotificationToken();
+    _plainNotificationToken.unsubscribeFromTopic('Rock&Roll');
+  }
 
 
   @override
@@ -159,6 +168,28 @@ class _MyAppState extends State<MyApp> {
               Text("tipo de mensaje: -> "+ _typeMessage),
               Text("mensage : -> "+ _batteryLevel),
               Text("title : -> "+ _title),
+              Row(
+                children: <Widget>[
+                  RaisedButton(child: Text("Subscribe Rock & Roll"),
+                    onPressed: () {
+                      _subscribeAChannel();
+                    },
+                    color: Colors.black,
+                    textColor: Colors.yellow,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    splashColor: Colors.grey,
+                  ),
+                  RaisedButton(child: Text("UnSubscribe -> Rock & Roll"),
+                    onPressed: () {
+                      _unSubscribeAChannel();
+                    },
+                    color: Colors.red,
+                    textColor: Colors.yellow,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    splashColor: Colors.grey,
+                  )
+                ],
+              ),
               Builder(
                 builder: (context) => RaisedButton(
                   child: Text("Request permission"),
