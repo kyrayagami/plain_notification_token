@@ -38,6 +38,14 @@ class PlainNotificationToken {
   /// Returns the APNs (in iOS)/FCM (in Android) token.
   Future<String> getToken() => _channel.invokeMethod<String>('getToken');
 
+  Future<void> subscribeToTopic(String topic){
+    return _channel.invokeMethod<void>('subscribe', {"channel": topic});
+  }
+
+  Future<void> unsubscribeFromTopic(String topic){
+    return _channel.invokeMethod<void>('unsubscribe', {"channel": topic});
+  }
+
   final StreamController<IosNotificationSettings> _iosSettingsStreamController =
       StreamController<IosNotificationSettings>.broadcast();
 

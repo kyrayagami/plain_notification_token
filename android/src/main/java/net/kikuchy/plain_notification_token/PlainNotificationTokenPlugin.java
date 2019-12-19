@@ -29,13 +29,17 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.RemoteMessage;
 import com.parse.ManifestInfo;
 import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.fcm.ParseFCM;
 //import com.parse.fcm.ParseFCM;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -122,6 +126,31 @@ public class PlainNotificationTokenPlugin implements MethodCallHandler, PluginRe
         switch (call.method) {
 
             case "configure":
+                break;
+            case "getInstallationsObjectId":
+                break;
+            case "getSubscriptions":
+
+                List<String> subscriptions = ParseInstallation.getCurrentInstallation().getList("channels");
+                JSONArray subcriptionsArray = new JSONArray();
+                if (subscriptions != null) {
+                    subcriptionsArray= new JSONArray(subscriptions);
+                }
+                result.success(subcriptionsArray);
+
+                break;
+            case "subscribe":
+
+                String channelSub = call.argument("channel");
+                ParsePush.subscribeInBackground(channelSub);
+                result.success(null);
+
+                break;
+            case "unsubscribe":
+
+                String channelUnSub = call.argument("channel");
+                ParsePush.unsubscribeInBackground(channelUnSub);
+                result.success(null);
 
                 break;
             case "getToken":
