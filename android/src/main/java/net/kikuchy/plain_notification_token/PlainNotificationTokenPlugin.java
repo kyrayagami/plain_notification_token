@@ -38,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,20 +125,20 @@ public class PlainNotificationTokenPlugin implements MethodCallHandler, PluginRe
         }*/
         Log.e("onMethodCall", call.method);
         switch (call.method) {
-
+            case "getInstallationId":
+                String installationId = ParseInstallation.getCurrentInstallation().getInstallationId();
+                result.success(installationId);
+                break;
             case "configure":
                 break;
             case "getInstallationsObjectId":
+                String objectId = ParseInstallation.getCurrentInstallation().getObjectId();
+                result.success(objectId);
                 break;
             case "getSubscriptions":
-
                 List<String> subscriptions = ParseInstallation.getCurrentInstallation().getList("channels");
-                JSONArray subcriptionsArray = new JSONArray();
-                if (subscriptions != null) {
-                    subcriptionsArray= new JSONArray(subscriptions);
-                }
-                result.success(subcriptionsArray);
-
+                Log.e("subscriptions",subscriptions.toString());
+                result.success(subscriptions);
                 break;
             case "subscribe":
 

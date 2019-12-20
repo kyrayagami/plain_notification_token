@@ -105,6 +105,20 @@
 //      [self runTask:runMyTask arguments:taskArgs launchPath:command];
 //      - (void)runTask:(NSTask *)theTask arguments:(NSArray *)arguments launchPath:(NSString *)launchPath;
 //      -(void)initParse:(NSString *)appId initParse:(NSString *)serverUrl{
+  }else if([@"subscribe" isEqualToString:call.method]){
+      PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+      
+      NSString *channelSub = call.arguments[@"channel"];
+      [currentInstallation addUniqueObject:channelSub forKey:@"channels"];
+      [currentInstallation saveInBackground];
+  }else if([@"unsubscribe" isEqualToString:call.method]){
+      PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+      NSString *channelSub = call.arguments[@"channel"];
+      [currentInstallation removeObject:channelSub forKey:@"channels"];
+      [currentInstallation saveInBackground];
+  }else if([@"getSubscriptions" isEqualToString:call.method]){
+      NSArray *channels = [PFInstallation currentInstallation].channels;
+      result(channels);
   }
   else {
     result(FlutterMethodNotImplemented);
@@ -255,28 +269,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     _resumingFromBackground = NO;
 }
-
-/*- (void)swizzled_application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    [self swizzled_application:application didReceiveRemoteNotification:userInfo];
-
-    if (application.applicationState != UIApplicationStateActive) {
-        // The application was just brought from the background to the foreground,
-        // so we consider the app as having been "opened by a push notification."
-        [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
-    }
-    //
-    // PN can either be opened by user or received directly by app:
-    // PN can only be received directly by app when app is running in foreground, UIApplicationStateActive.
-    // PN that arrived when app is not running or in background (UIApplicationStateInactive or UIApplicationStateBackground)
-    //    must be opened by user to reach this part of the code
-//    ParsePushPlugin* pluginInstance = [self getParsePluginInstance];
-
-//    [pluginInstance jsCallback:userInfo withAction:(application.applicationState == UIApplicationStateActive) ? @"RECEIVE" : @"OPEN"];
-    NSLog(@"llego la notificacion  en swizzled application: ");
-    [PFPush handlePush:userInfo];
-    [_channel invokeMethod:@"onMessage" arguments:userInfo];
-}*/
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 //    if (launchOptions != nil) {

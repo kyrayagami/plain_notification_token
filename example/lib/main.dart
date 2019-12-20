@@ -135,14 +135,23 @@ class _MyAppState extends State<MyApp> {
       print(e);
     }
   }
-  void _subscribeAChannel(){
+  void _subscribeAChannel(String channelSub){
     final PlainNotificationToken _plainNotificationToken = PlainNotificationToken();
-    _plainNotificationToken.subscribeToTopic('Rock&Roll');
+    _plainNotificationToken.subscribeToTopic(channelSub);
   }
 
-  void _unSubscribeAChannel(){
+  void _unSubscribeAChannel(String channelSub){
     final PlainNotificationToken _plainNotificationToken = PlainNotificationToken();
-    _plainNotificationToken.unsubscribeFromTopic('Rock&Roll');
+    _plainNotificationToken.unsubscribeFromTopic(channelSub);
+  }
+  void getSubcriptions() async{
+    print("hola subcriptions");
+    final PlainNotificationToken _plainNotificationToken = PlainNotificationToken();
+    var listChannels = await _plainNotificationToken.getListChannels();
+    print("channels");
+    for (var channel in listChannels) {
+      print(channel);
+    }
   }
 
 
@@ -168,27 +177,58 @@ class _MyAppState extends State<MyApp> {
               Text("tipo de mensaje: -> "+ _typeMessage),
               Text("mensage : -> "+ _batteryLevel),
               Text("title : -> "+ _title),
-              Row(
-                children: <Widget>[
-                  RaisedButton(child: Text("Subscribe Rock & Roll"),
+              Builder(
+                builder: (context) => RaisedButton(
+                  child: Text("Subscribe Rock & Roll"),
                     onPressed: () {
-                      _subscribeAChannel();
+                      _subscribeAChannel("Rock & Roll");
                     },
                     color: Colors.black,
                     textColor: Colors.yellow,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    
                     splashColor: Colors.grey,
                   ),
-                  RaisedButton(child: Text("UnSubscribe -> Rock & Roll"),
+              ),
+              Builder(
+                builder: (context) => RaisedButton(
+                  child: Text("UnSubscribe -> Rock & Roll"),
+                  onPressed: () {
+                    _unSubscribeAChannel("Rock & Roll");
+                  },
+                  color: Colors.red,
+                  textColor: Colors.yellow,
+                  splashColor: Colors.grey,
+                )
+              ),
+              
+              Builder(
+                builder: (context) => RaisedButton(
+                  child: Text("Subscribe Rap"),
                     onPressed: () {
-                      _unSubscribeAChannel();
+                      _subscribeAChannel("Rap");
                     },
-                    color: Colors.red,
-                    textColor: Colors.yellow,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    textColor: Colors.red,
                     splashColor: Colors.grey,
-                  )
-                ],
+                  ),
+              ),
+              Builder(
+                builder: (context) => RaisedButton(
+                  child: Text("UnSubscribe -> Rap"),
+                    onPressed: () {
+                      _unSubscribeAChannel("Rap");
+                    },
+                    textColor: Colors.yellow,
+                    splashColor: Colors.grey,
+                ),
+              ),
+              Builder(
+                builder: (context) => RaisedButton(
+                  child: Text("Get Subscriptions"),
+                  onPressed: () {
+                    // PlainNotificationToken().requestPermission();
+                    getSubcriptions();
+                  },
+                ),
               ),
               Builder(
                 builder: (context) => RaisedButton(

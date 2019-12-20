@@ -14,7 +14,7 @@ DEPENDENCIES:
   - plain_notification_token (from `.symlinks/plugins/plain_notification_token/ios`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Bolts
     - Parse
 
@@ -26,10 +26,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   Parse: 3b31a3dd1777b07ee7f0caee32fafbff544483a5
   plain_notification_token: c4357bc012dfb4f0de4a906e924dbe30d0e8cd4c
 
 PODFILE CHECKSUM: 1cd712dcae5a9d502f36d18a34f6d95635a2c726
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4

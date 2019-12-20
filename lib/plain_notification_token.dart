@@ -46,6 +46,13 @@ class PlainNotificationToken {
     return _channel.invokeMethod<void>('unsubscribe', {"channel": topic});
   }
 
+  Future<List<dynamic>> getListChannels() async{
+    final List<dynamic> listChannels = await _channel.invokeMethod('getSubscriptions');
+    // print("se imprimen los canales subscritos");
+    // print(listChannels);
+    return listChannels;
+  }
+
   final StreamController<IosNotificationSettings> _iosSettingsStreamController =
       StreamController<IosNotificationSettings>.broadcast();
 
